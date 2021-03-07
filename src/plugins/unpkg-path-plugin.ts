@@ -20,7 +20,8 @@ export const unpkgPathPlugin = () => {
         if (isSubPath || isSuperPath) {
           return {
             namespace: 'a',
-            path: new URL(args.path, args.importer + '/').href // final forward slash is important to get correct relative path to importer
+            // final forward slash is important to get correct relative path to importer
+            path: new URL(args.path, 'https://unpkg.com' + args.resolveDir + '/').href 
           };
         }
         
@@ -50,7 +51,9 @@ export const unpkgPathPlugin = () => {
         console.log(request);
         return {
           loader: 'jsx',
-          contents: data
+          contents: data,
+          // extract base dir for imported file, e.g. http://.../test-pkg/src/index.js -> /test-pkg/src
+          resolveDir: new URL('./', request.responseURL).pathname  
         };
       });
     },
