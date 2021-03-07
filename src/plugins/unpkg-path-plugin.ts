@@ -12,19 +12,25 @@ export const unpkgPathPlugin = () => {
       build.onResolve({ filter: /.*/ }, async (args: any) => {
         console.log('onResolve', args);
         if(args.path === 'index.js') {
-          return { path: args.path, namespace: 'a' };
+            return { path: args.path, namespace: 'a' };
         } 
 
+        const isSubPath = args.path.includes('./');
+        const isSuperPath = args.path.includes('../');
+        if (isSubPath || isSuperPath) {
+          return {
+            namespace: 'a',
+            path: new URL(args.path, args.importer + '/').href // final forward slash is important to get correct relative path to importer
+          };
+        }
+        
         return {
           namespace: 'a',
           path: `https://unpkg.com/${args.path}`
         };
-        // else if (args.path === 'tiny-test-pkg') { 
-        //   return { path: 'https://unpkg.com/tiny-test-pkg@1.0.0/index.js', namespace: 'a' };
-        // }
       });
  
-      // Hook into the loading process while bundling, with very simple example.
+      // Hook into the loading process while bundling
       build.onLoad({ filter: /.*/ }, async (args: any) => {
         console.log('onLoad', args);
  
