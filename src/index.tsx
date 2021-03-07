@@ -1,6 +1,7 @@
 import * as esbuild from 'esbuild-wasm';
 import { useState, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
+import { unpkgPathPlugin } from './plugins/unpkg-path-plugin';
 
 const App = () => {
   const ref = useRef<any>(); // reference hook to get a reference to any component
@@ -27,11 +28,13 @@ const App = () => {
       // Do nothing if service not ready
       return;
     }
-    const result = await ref.current.transform(input, {
-      loader: 'jsx', // handle javascript and typescript.
-      target: 'es2015',
+    const result = await ref.current.build({
+      entryPoints: ['index.js'],
+      bundle: true,
+      write: false,
+      plugins: [unpkgPathPlugin()],
     });
-    setCode(result.code);
+    setCode(result.outputFiles[0].text);
   };
 
   return (
