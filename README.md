@@ -2,6 +2,10 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## My Disclaimer - Please Read This First!
+User Beware! This is a work in progress. So far i have not implemented a handling untrusted user code safely.  
+But this will come up soon.
+
 ## Available Scripts
 
 In the project directory, you can run:
