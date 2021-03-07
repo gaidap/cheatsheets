@@ -10,7 +10,7 @@ const App = () => {
   const startService = async () => {
     ref.current = await esbuild.startService({
       worker: true,
-      wasmURL: '/esbuild.wasm'
+      wasmURL: '/esbuild.wasm',
     });
   };
 
@@ -22,11 +22,16 @@ const App = () => {
     setInput(e.target.value);
   };
 
-  const onClickSubmit = () => {
-    if   (!ref.current) { // Do nothing if service not ready
+  const onClickSubmit = async () => {
+    if (!ref.current) {
+      // Do nothing if service not ready
       return;
     }
-    console.log(ref.current);
+    const result = await ref.current.transform(input, {
+      loader: 'jsx', // handle javascript and typescript.
+      target: 'es2015',
+    });
+    setCode(result.code);
   };
 
   return (
@@ -38,7 +43,7 @@ const App = () => {
       <pre>{code}</pre>
     </div>
   );
-};;;;;;;;
+};
 
 ReactDOM.render(
   <App/>, document.querySelector('#root')
