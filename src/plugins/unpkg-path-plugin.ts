@@ -35,13 +35,13 @@ export const unpkgPathPlugin = () => {
       build.onLoad({ filter: /.*/ }, async (args: any) => {
         console.log('onLoad', args);
  
-        // Beware, hardcoded imaginary files below.
+        // Beware, hardcoded imaginary file below. For testing purposes. Will be cleaned up soon.
         if (args.path === 'index.js') {
           // if esbuild get instruction to look up for something called index.js return stuff below.
           return {
             loader: 'jsx',
             contents: `
-              import React from 'react';
+              import React from 'react@16.0.0';
               console.log(React);
             `,
           };
