@@ -1,6 +1,7 @@
 // Copied from Stephen Grinder (Udemy Teacher)
 // Plugin to intercept and override part of esbuild bundling process to prevent access to file system for loading resources.
 import * as esbuild from 'esbuild-wasm';
+import axios from 'axios';
  
 export const unpkgPathPlugin = () => {
   return {
@@ -10,8 +11,11 @@ export const unpkgPathPlugin = () => {
       // and hook into the resolve process.
       build.onResolve({ filter: /.*/ }, async (args: any) => {
         console.log('onResolve', args);
-        // add custom namespace to filter encapsulate imported code to prevent conflicts.
-        return { path: args.path, namespace: 'a' };
+        if(args.path === 'index.js') {
+          return { path: args.path, namespace: 'a' };
+        } else if (args.path === 'tiny-test-pkg') { 
+          return { path: 'https://unpkg.com/tiny-test-pkg@1.0.0/index.js', namespace: 'a' };
+        }
       });
  
       // Hook into the loading process while bundling, with very simple example.
@@ -24,16 +28,17 @@ export const unpkgPathPlugin = () => {
           return {
             loader: 'jsx',
             contents: `
-              import message from './message';
+              const message =  require('tiny-test-pkg');
               console.log(message);
             `,
           };
-        } else {
-          return {
-            loader: 'jsx',
-            contents: 'export default "hi there!"',
-          };
         }
+        // forward url from intercepted resolve to unpkg.com with help of axios
+        const {data} = await axios.get(args.path);
+        return {
+          loader: 'jsx',
+          contents: data
+        };
       });
     },
   };
