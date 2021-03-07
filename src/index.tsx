@@ -29,6 +29,7 @@ const App = () => {
       return;
     }
     const result = await ref.current.build({
+      define: { 'process.env.NODE_ENV': '"production"', global: 'window' },
       entryPoints: ['index.js'],
       bundle: true,
       write: false,
