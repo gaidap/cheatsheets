@@ -46,7 +46,8 @@ export const unpkgPathPlugin = () => {
           };
         }
         // forward url from intercepted resolve to unpkg.com with help of axios
-        const {data} = await axios.get(args.path);
+        const {data, request} = await axios.get(args.path);
+        console.log(request);
         return {
           loader: 'jsx',
           contents: data
