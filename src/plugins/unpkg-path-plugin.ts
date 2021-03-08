@@ -1,13 +1,6 @@
-// Plugin to intercept and override part of esbuild bundling process to prevent access to file system for loading resources.
 import * as esbuild from 'esbuild-wasm';
-import axios from 'axios';
-import localForage from 'localforage';
 
-const fileCache = localForage.createInstance({
-  name: 'filecache'
-});
-
-export const unpkgPathPlugin = (userInput: string) => {
+export const unpkgPathPlugin = () => {
   return {
     name: 'unpkg-path-plugin',
     setup(build: esbuild.PluginBuild) {
@@ -31,30 +24,7 @@ export const unpkgPathPlugin = (userInput: string) => {
           namespace: 'a',
           path: `https://unpkg.com/${args.path}`
         };
-      });
- 
-      build.onLoad({ filter: /.*/ }, async (args: any) => {
-        if (args.path === 'index.js') {
-          return {
-            loader: 'jsx',
-            contents: userInput,
-          };
-        }
-
-        const cacheHit = await fileCache.getItem<esbuild.OnLoadResult>(args.path);
-        if (cacheHit) {
-          return cacheHit;
-        }
-        const {data, request} = await axios.get(args.path);     
-        const result: esbuild.OnLoadResult | null = {
-          loader: 'jsx',
-          contents: data,
-          // extract base dir for imported file, e.g. http://.../test-pkg/src/index.js -> /test-pkg/src
-          resolveDir: new URL('./', request.responseURL).pathname  
-        };
-        await fileCache.setItem(args.path, result);
-        return result;
-      });
+      });    
     },
   };
 };
