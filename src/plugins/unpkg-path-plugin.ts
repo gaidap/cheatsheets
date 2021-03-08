@@ -11,10 +11,12 @@ export const unpkgPathPlugin = (userInput: string) => {
   return {
     name: 'unpkg-path-plugin',
     setup(build: esbuild.PluginBuild) {
+      // Handle root entry file of 'index.js'
       build.onResolve({filter: /(^index\.js$)/}, () => {
         return { path: 'index.js', namespace: 'a' };
       });
 
+      // Handle modules with relative paths
       build.onResolve({filter: /^\.+\//}, (args: any) => {
         return {
           namespace: 'a',
@@ -23,6 +25,7 @@ export const unpkgPathPlugin = (userInput: string) => {
         };
       });
 
+      // Handle modules main file
       build.onResolve({ filter: /.*/ }, async (args: any) => {      
         return {
           namespace: 'a',
