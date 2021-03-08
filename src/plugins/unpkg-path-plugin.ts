@@ -2,7 +2,19 @@
 // Plugin to intercept and override part of esbuild bundling process to prevent access to file system for loading resources.
 import * as esbuild from 'esbuild-wasm';
 import axios from 'axios';
- 
+import localForage from 'localforage';
+
+const fileCache = localForage.createInstance({
+  name: 'filecache'
+});
+
+(async() =>{
+  await fileCache.setItem('color', 'red');
+
+  const color = await fileCache.getItem('color');
+  console.log(color);
+})()
+
 export const unpkgPathPlugin = () => {
   return {
     name: 'unpkg-path-plugin',
