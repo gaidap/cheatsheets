@@ -51,15 +51,10 @@ export const unpkgPathPlugin = () => {
           };
         }
 
-        // Check first if we already fetched the file and if it is in the cache
         const cacheHit = await fileCache.getItem<esbuild.OnLoadResult>(args.path);
-      
-        // If cached -> return it immediately
         if (cacheHit) {
           return cacheHit;
         }
-
-        // forward url from intercepted resolve to unpkg.com with help of axios
         const {data, request} = await axios.get(args.path);     
         const result: esbuild.OnLoadResult | null = {
           loader: 'jsx',
@@ -67,8 +62,6 @@ export const unpkgPathPlugin = () => {
           // extract base dir for imported file, e.g. http://.../test-pkg/src/index.js -> /test-pkg/src
           resolveDir: new URL('./', request.responseURL).pathname  
         };
-
-        // store response in cache to minimize requests
         await fileCache.setItem(args.path, result);
         return result;
       });
