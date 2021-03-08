@@ -17,14 +17,13 @@ return {
     };
   });
 
-  build.onLoad({ filter: /.css$)/ }, async (args: any) => {
+  build.onLoad({ filter: /.css$/ }, async (args: any) => {
     const cacheHit = await fileCache.getItem<esbuild.OnLoadResult>(args.path);
     if (cacheHit) {
       return cacheHit;
     }
 
-    const {data, request} = await axios.get(args.path);     
-    const fileType = args.path.match(/.css$/) ? 'css' : 'jsx';
+    const {data, request} = await axios.get(args.path);    
     // Little hack to pipe imported css into a head tag to load it onto the screen
     const escaped = data
     .replace(/\n/g, '')
@@ -50,7 +49,7 @@ return {
     if (cacheHit) {
       return cacheHit;
     }
-    
+
     const {data, request} = await axios.get(args.path);     
     const result: esbuild.OnLoadResult | null = {
       loader: 'jsx',
