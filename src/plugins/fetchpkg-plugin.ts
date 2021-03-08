@@ -26,12 +26,12 @@ return {
 
   build.onLoad({ filter: /.css$/ }, async (args: any) => {
     const {data, request} = await axios.get(args.path);    
-    // Little hack to pipe imported css into a head tag to load it onto the screen
     const escaped = data
     .replace(/\n/g, '')
     .replace(/"/g, '\\"')
     .replace(/'/g, "\\'");
-    const content = `
+    // Little hack to pipe imported css into a head tag to load it onto the screen
+    const content = ` 
                     const style = document.createElement('style');
                     style.innerText = '${escaped}';
                     document.head.appendChild(style);
@@ -51,7 +51,6 @@ return {
     const result: esbuild.OnLoadResult | null = {
       loader: 'jsx',
       contents: data,
-      // extract base dir for imported file, e.g. http://.../test-pkg/src/index.js -> /test-pkg/src
       resolveDir: new URL('./', request.responseURL).pathname  
     };
     await fileCache.setItem(args.path, result);
