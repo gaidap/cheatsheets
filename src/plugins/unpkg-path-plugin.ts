@@ -8,13 +8,6 @@ const fileCache = localForage.createInstance({
   name: 'filecache'
 });
 
-(async() =>{
-  await fileCache.setItem('color', 'red');
-
-  const color = await fileCache.getItem('color');
-  console.log(color);
-})()
-
 export const unpkgPathPlugin = () => {
   return {
     name: 'unpkg-path-plugin',
@@ -46,7 +39,6 @@ export const unpkgPathPlugin = () => {
       // Hook into the loading process while bundling
       build.onLoad({ filter: /.*/ }, async (args: any) => {
         console.log('onLoad', args);
- 
         // Beware, hardcoded imaginary file below. For testing purposes. Will be cleaned up soon.
         if (args.path === 'index.js') {
           // if esbuild get instruction to look up for something called index.js return stuff below.
@@ -58,15 +50,27 @@ export const unpkgPathPlugin = () => {
             `,
           };
         }
+
+        // Check first if we already fetched the file and if it is in the cache
+        const cacheHit = await fileCache.getItem<esbuild.OnLoadResult>(args.path);
+      
+        // If cached -> return it immediately
+        if (cacheHit) {
+          return cacheHit;
+        }
+
         // forward url from intercepted resolve to unpkg.com with help of axios
-        const {data, request} = await axios.get(args.path);
-        console.log(request);
-        return {
+        const {data, request} = await axios.get(args.path);     
+        const result: esbuild.OnLoadResult | null = {
           loader: 'jsx',
           contents: data,
           // extract base dir for imported file, e.g. http://.../test-pkg/src/index.js -> /test-pkg/src
           resolveDir: new URL('./', request.responseURL).pathname  
         };
+
+        // store response in cache to minimize requests
+        await fileCache.setItem(args.path, result);
+        return result;
       });
     },
   };
