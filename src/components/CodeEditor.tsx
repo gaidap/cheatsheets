@@ -1,3 +1,4 @@
+import 'bulmaswatch/superhero/bulmaswatch.min.css';
 import MonacoEditor, { EditorDidMount } from '@monaco-editor/react';
 import { useRef } from 'react';
 import prettier from 'prettier';
@@ -17,7 +18,6 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ onChange, initialValue }) => {
     editor.onDidChangeModelContent(() => {
       onChange(getValue());
     });
-
     editor.getModel()?.updateOptions({ tabSize: 2 });
   };
 
@@ -38,24 +38,29 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ onChange, initialValue }) => {
 
   return (
     <div>
-      <button onClick={onClickFormat}>Format</button>
+      <button
+        className="button button-format is-primary is-small"
+        onClick={onClickFormat}
+      >
+        Format
+      </button>
       <MonacoEditor
-          editorDidMount={editorDidMount}
-          value={initialValue}
-          theme="dark"
-          language="javascript"
-          height="500px"
-          options={{
-            wordWrap: 'on',
-            useTabStops: false,
-            minimap: { enabled: false },
-            showUnused: false,
-            folding: false,
-            lineNumbersMinChars: 3,
-            fontSize: 16,
-            scrollBeyondLastLine: false,
-            automaticLayout: true,
-         }}
+        editorDidMount={editorDidMount}
+        value={initialValue}
+        theme="dark"
+        language="javascript"
+        height="500px"
+        options={{
+          wordWrap: 'on',
+          useTabStops: false,
+          minimap: { enabled: false },
+          showUnused: false,
+          folding: false,
+          lineNumbersMinChars: 3,
+          fontSize: 16,
+          scrollBeyondLastLine: false,
+          automaticLayout: true,
+        }}
       />
     </div>
   );
