@@ -71,7 +71,10 @@ const App = () => {
   // the upside is it is fast and extremly simple since we do not need more infrastructure
   return (
     <div>
-      <CodeEditor />
+      <CodeEditor
+        initialValue="const helloWorld = (name) => console.log(`Hello ${name}!`);"
+        onChange={(value) => setInput(value)}
+      />
       <textarea value={input} onChange={onChangeTA}></textarea>
       <div>
         <button onClick={onClickSubmit}>Submit</button>
