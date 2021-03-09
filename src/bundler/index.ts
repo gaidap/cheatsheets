@@ -1,6 +1,6 @@
 import * as esbuild from 'esbuild-wasm';
-import { fetchPkgPlugin } from '../plugins/fetchpkg-plugin';
-import { unpkgPathPlugin } from '../plugins/unpkg-path-plugin';
+import { fetchPkgPlugin } from './plugins/fetchpkg-plugin';
+import { unpkgPathPlugin } from './plugins/unpkg-path-plugin';
 
 let service: esbuild.Service;
 const bundle = async (rawCode: string) => {
