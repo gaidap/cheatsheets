@@ -27,12 +27,17 @@ const htmlContent = `
 
 const Preview: React.FC<PreviewProps> = ({ code }) => {
   const iframeRef = useRef<any>();
+  
   useEffect(() => {
     // reset the iFrame properly before exexuting user code
     iframeRef.current.srcdoc = htmlContent;
     // update content in iFrame
     iframeRef.current.contentWindow.postMessage(code, '*');
   }, [code]);
+
+  // set sandbox to empty string as workaround to isolate code execution in the iFrame
+  // the downside is that the user code cannot use local storage or cookies etc.
+  // the upside is it is fast and extremly simple since we do not need more infrastructure
   return (
     <iframe
       ref={iframeRef}
