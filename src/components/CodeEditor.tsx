@@ -42,6 +42,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ onChange, initialValue }) => {
 
   const onClickFormat = () => {
     if (!editorRef.current) {
+      // Do nothing if editor not ready
       return;
     }
     const unformattedCode = editorRef.current.getModel().getValue();
