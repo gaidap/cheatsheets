@@ -1,8 +1,11 @@
-import 'bulmaswatch/superhero/bulmaswatch.min.css';
+
+import './CodeEditor.css';
 import MonacoEditor, { EditorDidMount } from '@monaco-editor/react';
 import { useRef } from 'react';
 import prettier from 'prettier';
 import parser from 'prettier/parser-babel';
+import jscodeshift from 'jscodeshift';
+import Highlighter from 'monaco-jsx-highlighter';
 
 interface CodeEditorProps {
   initialValue: string;
@@ -18,7 +21,22 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ onChange, initialValue }) => {
     editor.onDidChangeModelContent(() => {
       onChange(getValue());
     });
+    
     editor.getModel()?.updateOptions({ tabSize: 2 });
+
+    const highlighter = new Highlighter(
+      // @ts-ignore TS is not aware of the monaco object on the window
+      window.monaco,
+      jscodeshift,
+      editor
+    );
+    highlighter.highLightOnDidChangeModelContent(
+      // add empty error log functions as workaround to fix log clutter while typing
+      () => {},
+      () => {},
+      undefined,
+      () => {}
+    );
   };
 
   const onClickFormat = () => {
@@ -26,22 +44,21 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ onChange, initialValue }) => {
       return;
     }
     const unformattedCode = editorRef.current.getModel().getValue();
-    const formattedCode = prettier.format(unformattedCode, {
-      parser: 'babel',
-      plugins: [parser],
-      useTabs: false,
-      semi: true,
-      singleQuote: true,
-    });
+    const formattedCode = prettier
+      .format(unformattedCode, {
+        parser: 'babel',
+        plugins: [parser],
+        useTabs: false,
+        semi: true,
+        singleQuote: true,
+      }) 
+      .replace(/\n$/, ''); // prevent prettier to add trailing newline
     editorRef.current.setValue(formattedCode);
   };
 
   return (
-    <div>
-      <button
-        className="button button-format is-primary is-small"
-        onClick={onClickFormat}
-      >
+    <div className="editor-wrapper">
+      <button className="button button-format is-primary is-small" onClick={onClickFormat}>
         Format
       </button>
       <MonacoEditor

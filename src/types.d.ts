@@ -1,0 +1,1 @@
+declare module 'monaco-jsx-highlighter'; // prevent TypeScript error of missing type definitions
