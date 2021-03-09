@@ -37,6 +37,11 @@ const App = () => {
       plugins: [unpkgPathPlugin(), fetchPkgPlugin(input)],
     });
     setCode(result.outputFiles[0].text);
+    try {
+      eval(result.outputFiles[0].text);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
