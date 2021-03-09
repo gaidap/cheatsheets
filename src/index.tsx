@@ -51,6 +51,7 @@ const App = () => {
         <button onClick={onClickSubmit}>Submit</button>
       </div>
       <pre>{code}</pre>
+      <iframe src="/test.html" />
     </div>
   );
 };
