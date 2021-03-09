@@ -20,8 +20,8 @@ const App = () => {
     startService();
   }, []); // Add an empty Array as 2nd argument to signal useEffect to run only once.
 
-  const onChangeTA = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setInput(e.target.value);
+  const onChangeTA = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setInput(event.target.value);
   };
 
   const onClickSubmit = async () => {
@@ -51,7 +51,7 @@ const App = () => {
       <body>
         <div id="root"></div>
         <script>
-          window.addEventListener('message', (e) => {
+          window.addEventListener('message', (event) => {
             try {
               eval(event.data);
             } catch (error) {
