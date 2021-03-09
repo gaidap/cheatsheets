@@ -5,13 +5,13 @@ import { fetchPkgPlugin } from './plugins/fetchpkg-plugin';
 import { unpkgPathPlugin } from './plugins/unpkg-path-plugin';
 
 const App = () => {
-  const ref = useRef<any>();
+  const service = useRef<any>();
   const iFrame = useRef<any>();
   const [input, setInput] = useState('');
   const [code, setCode] = useState('');
 
   const startService = async () => {
-    ref.current = await esbuild.startService({
+    service.current = await esbuild.startService({
       worker: true,
       wasmURL: 'https://unpkg.com/esbuild-wasm@0.8.27/esbuild.wasm',
     });
@@ -26,12 +26,14 @@ const App = () => {
   };
 
   const onClickSubmit = async () => {
-    if (!ref.current) {
+    if (!service.current) {
       // Do nothing if service not ready
       return;
     }
 
-    const result = await ref.current.build({
+    iFrame.current.srcdoc = htmlContent;
+
+    const result = await service.current.build({
       define: { 'process.env.NODE_ENV': '"production"', global: 'window' },
       entryPoints: ['index.js'],
       bundle: true,
@@ -51,7 +53,13 @@ const App = () => {
         <div id="root"></div>
         <script>
           window.addEventListener('message', (e) => {
-            eval(event.data);
+            try {
+              eval(event.data);
+            } catch (error) {
+              const root = document.querySelector('#root');
+              root.innerHTML = '<div style="color: red;"><h4>Runtime Error</h4>' + error + '</div>'; 
+              console.error(error); // bubble up error to console.
+            }
           }, false);
         </script>
       </body>
