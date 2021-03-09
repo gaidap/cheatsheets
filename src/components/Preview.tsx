@@ -30,6 +30,7 @@ const Preview: React.FC<PreviewProps> = ({ code }) => {
   useEffect(() => {
     // reset the iFrame properly before exexuting user code
     iframeRef.current.srcdoc = htmlContent;
+    // update content in iFrame
     iframeRef.current.contentWindow.postMessage(code, '*');
   }, [code]);
   return (
