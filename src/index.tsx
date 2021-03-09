@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import { fetchPkgPlugin } from './plugins/fetchpkg-plugin';
 import { unpkgPathPlugin } from './plugins/unpkg-path-plugin';
+import CodeEditor from './components/CodeEditor';
 
 const App = () => {
   const service = useRef<any>();
@@ -70,6 +71,7 @@ const App = () => {
   // the upside is it is fast and extremly simple since we do not need more infrastructure
   return (
     <div>
+      <CodeEditor />
       <textarea value={input} onChange={onChangeTA}></textarea>
       <div>
         <button onClick={onClickSubmit}>Submit</button>
