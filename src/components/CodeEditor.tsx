@@ -22,9 +22,10 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ onChange, initialValue }) => {
     editor.onDidChangeModelContent(() => {
       onChange(getValue());
     });
-    
+
     editor.getModel()?.updateOptions({ tabSize: 2 });
 
+    // Add custom highlighting for React component specific code
     const highlighter = new Highlighter(
       // @ts-ignore TS is not aware of the monaco object on the window
       window.monaco,
