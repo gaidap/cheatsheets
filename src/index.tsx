@@ -6,12 +6,12 @@ import { unpkgPathPlugin } from './plugins/unpkg-path-plugin';
 import CodeEditor from './components/CodeEditor';
 
 const App = () => {
-  const service = useRef<any>();
-  const iFrame = useRef<any>();
+  const serviceRef = useRef<any>();
+  const iFrameRef = useRef<any>();
   const [input, setInput] = useState('');
 
   const startService = async () => {
-    service.current = await esbuild.startService({
+    serviceRef.current = await esbuild.startService({
       worker: true,
       wasmURL: 'https://unpkg.com/esbuild-wasm@0.8.27/esbuild.wasm',
     });
@@ -26,15 +26,15 @@ const App = () => {
   };
 
   const onClickSubmit = async () => {
-    if (!service.current) {
+    if (!serviceRef.current) {
       // Do nothing if service not ready
       return;
     }
 
     // reset the iFrame properly before exexuting user code
-    iFrame.current.srcdoc = htmlContent;
+    iFrameRef.current.srcdoc = htmlContent;
 
-    const result = await service.current.build({
+    const result = await serviceRef.current.build({
       define: { 'process.env.NODE_ENV': '"production"', global: 'window' },
       entryPoints: ['index.js'],
       bundle: true,
@@ -42,7 +42,10 @@ const App = () => {
       plugins: [unpkgPathPlugin(), fetchPkgPlugin(input)],
     });
 
-    iFrame.current.contentWindow.postMessage(result.outputFiles[0].text, '*');
+    iFrameRef.current.contentWindow.postMessage(
+      result.outputFiles[0].text,
+      '*'
+    );
   };
 
   // Generate html document locally to prevent an unnecessary request to fetch the html for the iFrame
@@ -80,7 +83,7 @@ const App = () => {
         <button onClick={onClickSubmit}>Submit</button>
       </div>
       <iframe
-        ref={iFrame}
+        ref={iFrameRef}
         title="code-sandbox-preview"
         sandbox="allow-scripts"
         srcDoc={htmlContent}

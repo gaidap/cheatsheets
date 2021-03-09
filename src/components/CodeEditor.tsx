@@ -1,5 +1,5 @@
 import MonacoEditor, { EditorDidMount } from '@monaco-editor/react';
-import React from 'react';
+import { useRef } from 'react';
 import prettier from 'prettier';
 import parser from 'prettier/parser-babel';
 
@@ -9,8 +9,11 @@ interface CodeEditorProps {
 }
 
 const CodeEditor: React.FC<CodeEditorProps> = ({ onChange, initialValue }) => {
+  const editorRef = useRef<any>();
+
   // Register a listener on editor startup to hook into change events to update our model state
   const editorDidMount: EditorDidMount = (getValue, editor) => {
+    editorRef.current = editor;
     editor.onDidChangeModelContent(() => {
       onChange(getValue());
     });
@@ -19,7 +22,18 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ onChange, initialValue }) => {
   };
 
   const onClickFormat = () => {
-    
+    if (!editorRef.current) {
+      return;
+    }
+    const unformattedCode = editorRef.current.getModel().getValue();
+    const formattedCode = prettier.format(unformattedCode, {
+      parser: 'babel',
+      plugins: [parser],
+      useTabs: false,
+      semi: true,
+      singleQuote: true,
+    });
+    editorRef.current.setValue(formattedCode);
   };
 
   return (
@@ -41,7 +55,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ onChange, initialValue }) => {
             fontSize: 16,
             scrollBeyondLastLine: false,
             automaticLayout: true,
-                    }}
+         }}
       />
     </div>
   );
