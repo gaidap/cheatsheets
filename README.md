@@ -1,8 +1,9 @@
 # Getting Started with Cheatsheets
 
-This is a little learning project to get familiar with React and TypeScript. 
-
-It assambles a little jBook application that you can use to write, execute and store little code snippets written in JavaScript, HTML and CSS.
+This is a little learning project to get familiar with React and TypeScript.  
+It assambles a little jBook application that you can use to write, execute and store little code snippets written in JavaScript, HTML and CSS.  
+  
+You might have to disable your script blocker. Notice that uMatrix (https://github.com/gorhill/uMatrix/issues/926) get you some error message with the csp headers but you can ignore them, the app will work normally.
 
 ## Available Scripts
 
