@@ -5,7 +5,8 @@ import { fetchPkgPlugin } from './plugins/fetchpkg-plugin';
 import { unpkgPathPlugin } from './plugins/unpkg-path-plugin';
 
 const App = () => {
-  const ref = useRef<any>(); // reference hook to get a reference to any component
+  const ref = useRef<any>();
+  const iFrame = useRef<any>();
   const [input, setInput] = useState('');
   const [code, setCode] = useState('');
 
@@ -29,6 +30,7 @@ const App = () => {
       // Do nothing if service not ready
       return;
     }
+
     const result = await ref.current.build({
       define: { 'process.env.NODE_ENV': '"production"', global: 'window' },
       entryPoints: ['index.js'],
@@ -36,14 +38,29 @@ const App = () => {
       write: false,
       plugins: [unpkgPathPlugin(), fetchPkgPlugin(input)],
     });
-    setCode(result.outputFiles[0].text);
-    try {
-      eval(result.outputFiles[0].text);
-    } catch (error) {
-      console.error(error);
-    }
+
+    // setCode(result.outputFiles[0].text);
+    iFrame.current.contentWindow.postMessage(result.outputFiles[0].text, '*');
   };
 
+  // Generate html document locally to prevent an unnecessary request to fetch the html for the iFrame
+  const htmlContent = `
+    <html>
+      <head></head>
+      <body>
+        <div id="root"></div>
+        <script>
+          window.addEventListener('message', (e) => {
+            eval(event.data);
+          }, false);
+        </script>
+      </body>
+    </html>
+  `;
+
+  // set sandbox to empty string as workaround to isolate code execution in the iFrame
+  // the downside is that the user code cannot use local storage or cookies etc.
+  // the upside is it is fast and extremly simple since we do not need more infrastructure
   return (
     <div>
       <textarea value={input} onChange={onChangeTA}></textarea>
@@ -51,7 +68,12 @@ const App = () => {
         <button onClick={onClickSubmit}>Submit</button>
       </div>
       <pre>{code}</pre>
-      <iframe src="/test.html" />
+      <iframe
+        ref={iFrame}
+        title="code-sandbox"
+        sandbox="allow-scripts"
+        srcDoc={htmlContent}
+      />
     </div>
   );
 };
