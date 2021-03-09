@@ -8,7 +8,6 @@ const App = () => {
   const service = useRef<any>();
   const iFrame = useRef<any>();
   const [input, setInput] = useState('');
-  const [code, setCode] = useState('');
 
   const startService = async () => {
     service.current = await esbuild.startService({
@@ -31,6 +30,7 @@ const App = () => {
       return;
     }
 
+    // reset the iFrame properly before exexuting user code
     iFrame.current.srcdoc = htmlContent;
 
     const result = await service.current.build({
@@ -41,7 +41,6 @@ const App = () => {
       plugins: [unpkgPathPlugin(), fetchPkgPlugin(input)],
     });
 
-    // setCode(result.outputFiles[0].text);
     iFrame.current.contentWindow.postMessage(result.outputFiles[0].text, '*');
   };
 
@@ -75,10 +74,9 @@ const App = () => {
       <div>
         <button onClick={onClickSubmit}>Submit</button>
       </div>
-      <pre>{code}</pre>
       <iframe
         ref={iFrame}
-        title="code-sandbox"
+        title="code-sandbox-preview"
         sandbox="allow-scripts"
         srcDoc={htmlContent}
       />
