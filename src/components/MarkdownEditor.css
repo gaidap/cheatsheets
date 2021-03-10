@@ -1,10 +1,28 @@
-/*fixing class name confilct with bulma css*/
+/*fixing class name confilcts with bulma css*/
 .w-md-editor .title {
   line-height: unset;
   font-size: unset;
   font-weight: unset;
 }
 
+/*fixing class name confilcts with bulma css*/
 .w-md-editor ul {
   line-height: 1.0;
+}
+
+/*switch off default resize bar styling*/
+.markdown-editor .w-md-editor-bar svg {
+  display: none;
+}
+
+/*restyle resize bar to match our styling*/
+.markdown-editor .w-md-editor-bar {
+  position: relative;
+  height: 11px;
+  width: 100%;
+  cursor: row-resize;
+  background-color: #37414b;
+  background-repeat: no-repeat;
+  background-position: 50%;
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=');
 }
