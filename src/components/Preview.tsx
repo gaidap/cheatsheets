@@ -1,3 +1,4 @@
+import './Preview.css';
 import { useEffect, useRef } from 'react';
 
 interface PreviewProps {
@@ -39,12 +40,14 @@ const Preview: React.FC<PreviewProps> = ({ code }) => {
   // the downside is that the user code cannot use local storage or cookies etc.
   // the upside is it is fast and extremly simple since we do not need more infrastructure
   return (
-    <iframe
-      ref={iframeRef}
-      title="code-sandbox-preview"
-      sandbox="allow-scripts"
-      srcDoc={htmlContent}
-    />
+    <div className="preview-wrapper">
+      <iframe
+            ref={iframeRef}
+            title="code-sandbox-preview"
+            sandbox="allow-scripts"
+            srcDoc={htmlContent}
+      />
+    </div>
   );
 };
 

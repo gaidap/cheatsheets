@@ -14,9 +14,15 @@ interface CodeEditorProps {
   onChange(value: string): void;
 }
 
-const submitShortCutPressed = (event: IKeyboardEvent): boolean => {
+const clearScreenShortCutPressed = (event: IKeyboardEvent): boolean => {
   return (
     event.code === 'Enter' && event.ctrlKey === true && event.altKey === true
+  );
+};
+
+const reformatShortCutPressed = (event: IKeyboardEvent): boolean => {
+  return (
+    event.code === 'Enter' && event.ctrlKey === false && event.altKey === true
   );
 };
 
@@ -32,11 +38,11 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ onChange, initialValue }) => {
     });
 
     editor.onKeyUp((event) => {
-      if (submitShortCutPressed(event)) {
-        const submitButton: HTMLButtonElement | null = document.querySelector(
-          '#submitButton'
-        );
-        submitButton?.click();
+      if (clearScreenShortCutPressed(event)) {
+        editorRef.current.setValue('');
+      }
+      if (reformatShortCutPressed(event)) {
+        onClickFormat();
       }
     });
 
@@ -81,7 +87,10 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ onChange, initialValue }) => {
 
   return (
     <div className="editor-wrapper">
-      <button className="button button-format is-primary is-small" onClick={onClickFormat}>
+      <button
+        className="button button-format is-primary is-small"
+        onClick={onClickFormat}
+      >
         Format
       </button>
       <MonacoEditor
@@ -89,7 +98,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ onChange, initialValue }) => {
         value={initialValue}
         theme="dark"
         language="javascript"
-        height="500px"
+        height="100%"
         options={{
           wordWrap: 'on',
           useTabStops: false,
