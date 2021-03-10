@@ -5,6 +5,7 @@ import MDEditor from '@uiw/react-md-editor';
 const TextEditor: React.FC = () => {
   const divRef = useRef<HTMLDivElement | null>(null);
   const [editing, setEditing] = useState(false);
+  const [content, setContent] = useState('# Start writing your Markdown');
 
   useEffect(() => {
     const clickListener = (event: MouseEvent) => {
@@ -36,14 +37,19 @@ const TextEditor: React.FC = () => {
 
   if (editing) {
     return (
-      <div className="markdown-editor" ref={divRef}>
-        <MDEditor />
+      <div className='markdown-editor' ref={divRef}>
+        <MDEditor
+          value={content}
+          onChange={(content) => {
+            setContent(content || '');
+          }}
+        />
       </div>
     );
   }
   return (
-    <div className="markdown-editor" onClick={() => setEditing(true)}>
-      <MDEditor.Markdown source={'# Start writing your Markdown'} />
+    <div className='markdown-editor' onClick={() => setEditing(true)}>
+      <MDEditor.Markdown source={content} />
     </div>
   );
 };
