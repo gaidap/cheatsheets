@@ -4,8 +4,3 @@ export enum ActionType {
   DELETE_CELL = 'delete_cell',
   INSERT_CELL_BEFORE = 'instert_cell_before',
 }
-
-export enum Direction {
-  UP = 'up',
-  DOWN = 'down',
-}
