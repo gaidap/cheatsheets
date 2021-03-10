@@ -34,8 +34,13 @@ const Preview: React.FC<PreviewProps> = ({ code }) => {
   useEffect(() => {
     // reset the iFrame properly before exexuting user code
     iframeRef.current.srcdoc = htmlContent;
-    // update content in iFrame
-    iframeRef.current.contentWindow.postMessage(code, '*');
+
+    // Prevent flickering of iFrame if user is tempering with the innerHTML of the iFrame
+    // Otherwise the users input would not be displayed on the preview 
+    setTimeout(() => {
+            // update content in iFrame
+            iframeRef.current.contentWindow.postMessage(code, '*');
+    }, 50);
   }, [code]);
 
   // set sandbox to empty string as workaround to isolate code execution in the iFrame

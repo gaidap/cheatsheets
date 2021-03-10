@@ -13,8 +13,9 @@ const Resizable: React.FC<ResizableProps> = ({ direction, children }) => {
 
   useEffect(() => {
     let timer: any;
+
+    // use debouncing to improve resize performance
     const listener = () => {
-      // use debouncing to improve resize performance
       if (timer) {
         clearTimeout(timer);
       }
@@ -31,7 +32,7 @@ const Resizable: React.FC<ResizableProps> = ({ direction, children }) => {
     };
     window.addEventListener('resize', listener);
 
-    // return clean up funcion to deregister from event after work is done
+    // return clean up funcion to deregister from event the next time width was updated
     return () => {
       window.removeEventListener('resize', listener);
     };
