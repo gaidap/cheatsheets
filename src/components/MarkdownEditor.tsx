@@ -10,8 +10,8 @@ const TextEditor: React.FC = () => {
   useEffect(() => {
     const clickListener = (event: MouseEvent) => {
       const clickInsideEditor =
-        divRef.current &&
         event.target &&
+        divRef.current &&
         divRef.current.contains(event.target as Node);
 
       if (clickInsideEditor) {
@@ -48,8 +48,10 @@ const TextEditor: React.FC = () => {
     );
   }
   return (
-    <div className='markdown-editor' onClick={() => setEditing(true)}>
-      <MDEditor.Markdown source={content} />
+    <div className='markdown-editor card' onClick={() => setEditing(true)}>
+      <div className='card-content'>
+        <MDEditor.Markdown source={content} />
+      </div>
     </div>
   );
 };
