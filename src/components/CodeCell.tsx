@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import CodeEditor from './CodeEditor';
 import Preview from './Preview';
-import Resizable from './Resizable';
+import Resizable, { Direction } from './Resizable';
 import bundle from '../bundler';
 
 const CodeCell: React.FC = () => {
@@ -24,13 +24,10 @@ const CodeCell: React.FC = () => {
   }, [input]);
 
   return (
-    <Resizable direction="vertical">
+    <Resizable direction={Direction.VERTICAL}>
       <div style={{ height: '100%', display: 'flex', flexDirection: 'row' }}>
-        <Resizable direction="horizontal">
-          <CodeEditor
-            initialValue="// Start by typing some code"
-            onChange={(value) => setInput(value)}
-          />
+        <Resizable direction={Direction.VERTICAL}>
+          <CodeEditor initialValue='// Start by typing some code' onChange={(value) => setInput(value)} />
         </Resizable>
         <Preview code={code} bundlingStatus={bundlingStatus} />
       </div>
