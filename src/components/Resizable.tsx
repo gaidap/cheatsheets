@@ -19,8 +19,14 @@ const Resizable: React.FC<ResizableProps> = ({ direction, children }) => {
         clearTimeout(timer);
       }
       timer = setTimeout(() => {
-          setInnerHeight(window.innerHeight);
-          setInnerWidth(window.innerWidth);
+        setInnerHeight(window.innerHeight);
+        setInnerWidth(window.innerWidth);
+
+        // Solution for ResizableBox bug that ignores maxConstraints if width was set directly
+        const editorMaxWidth = window.innerWidth * 0.75;
+        if (editorMaxWidth < width) {
+          setWidth(editorMaxWidth);
+        }
       }, 100);
     };
     window.addEventListener('resize', listener);
