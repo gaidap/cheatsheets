@@ -22,16 +22,16 @@ const CodeCell: React.FC = () => {
   }, [input]);
 
   return (
-    <Resizable direction="vertical">  
-    <div style={{height: '100%', display: 'flex', flexDirection: 'row'}}>
-    <Resizable direction="horizontal">  
-      <CodeEditor
-        initialValue="const helloWorld = () => console.log('Hello World!');"
-        onChange={(value) => setInput(value)}
-      />
-    </Resizable>
-    <Preview code={code} />
-    </div>
+    <Resizable direction="vertical">
+      <div style={{ height: '100%', display: 'flex', flexDirection: 'row' }}>
+        <Resizable direction="horizontal">
+          <CodeEditor
+            initialValue="// Start by typing some code"
+            onChange={(value) => setInput(value)}
+          />
+        </Resizable>
+        <Preview code={code} />
+      </div>
     </Resizable>
   );
 };
