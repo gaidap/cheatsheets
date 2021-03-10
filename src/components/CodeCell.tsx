@@ -7,11 +7,13 @@ import bundle from '../bundler';
 const CodeCell: React.FC = () => {
   const [code, setCode] = useState('');
   const [input, setInput] = useState('');
+  const [bundlingStatus, setBundlingStatus] = useState('');
 
   useEffect(() => {
     const timer = setTimeout(async () => {
       const bundleOutput = await bundle(input);
-      setCode(bundleOutput);
+      setCode(bundleOutput.code);
+      setBundlingStatus(bundleOutput.error);
     }, 1000);
 
     return () => {
@@ -30,7 +32,7 @@ const CodeCell: React.FC = () => {
             onChange={(value) => setInput(value)}
           />
         </Resizable>
-        <Preview code={code} />
+        <Preview code={code} bundlingStatus={bundlingStatus} />
       </div>
     </Resizable>
   );

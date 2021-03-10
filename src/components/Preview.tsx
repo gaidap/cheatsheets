@@ -3,6 +3,7 @@ import { useEffect, useRef } from 'react';
 
 interface PreviewProps {
   code: string;
+  bundlingStatus: string;
 }
 
 // Generate html document locally to prevent an unnecessary request to fetch the html for the iFrame
@@ -37,18 +38,18 @@ const htmlContent = `
 </html>
 `;
 
-const Preview: React.FC<PreviewProps> = ({ code }) => {
+const Preview: React.FC<PreviewProps> = ({ code, bundlingStatus }) => {
   const iframeRef = useRef<any>();
-  
+
   useEffect(() => {
     // reset the iFrame properly before exexuting user code
     iframeRef.current.srcdoc = htmlContent;
 
     // Prevent flickering of iFrame if user is tempering with the innerHTML of the iFrame
-    // Otherwise the users input would not be displayed on the preview 
+    // Otherwise the users input would not be displayed on the preview
     setTimeout(() => {
-            // update content in iFrame
-            iframeRef.current.contentWindow.postMessage(code, '*');
+      // update content in iFrame
+      iframeRef.current.contentWindow.postMessage(code, '*');
     }, 50);
   }, [code]);
 
@@ -58,11 +59,12 @@ const Preview: React.FC<PreviewProps> = ({ code }) => {
   return (
     <div className="preview-wrapper">
       <iframe
-            ref={iframeRef}
-            title="code-sandbox-preview"
-            sandbox="allow-scripts"
-            srcDoc={htmlContent}
+        ref={iframeRef}
+        title="code-sandbox-preview"
+        sandbox="allow-scripts"
+        srcDoc={htmlContent}
       />
+      {bundlingStatus && <div className="preview-error">{bundlingStatus}</div>}
     </div>
   );
 };
