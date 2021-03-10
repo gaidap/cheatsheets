@@ -7,11 +7,18 @@ import prettier from 'prettier';
 import parser from 'prettier/parser-babel';
 import jscodeshift from 'jscodeshift';
 import Highlighter from 'monaco-jsx-highlighter';
+import { IKeyboardEvent } from 'monaco-editor';
 
 interface CodeEditorProps {
   initialValue: string;
   onChange(value: string): void;
 }
+
+const submitShortCutPressed = (event: IKeyboardEvent): boolean => {
+  return (
+    event.code === 'Enter' && event.ctrlKey === true && event.altKey === true
+  );
+};
 
 const CodeEditor: React.FC<CodeEditorProps> = ({ onChange, initialValue }) => {
   const editorRef = useRef<any>();
@@ -19,8 +26,18 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ onChange, initialValue }) => {
   // Register a listener on editor startup to hook into change events to update our model state
   const editorDidMount: EditorDidMount = (getValue, editor) => {
     editorRef.current = editor;
+
     editor.onDidChangeModelContent(() => {
       onChange(getValue());
+    });
+
+    editor.onKeyUp((event) => {
+      if (submitShortCutPressed(event)) {
+        const submitButton: HTMLButtonElement | null = document.querySelector(
+          '#submitButton'
+        );
+        submitButton?.click();
+      }
     });
 
     editor.getModel()?.updateOptions({ tabSize: 2 });
@@ -32,6 +49,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ onChange, initialValue }) => {
       jscodeshift,
       editor
     );
+
     highlighter.highLightOnDidChangeModelContent(
       // add empty error log functions as workaround to fix log clutter while typing
       () => {},
@@ -46,6 +64,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ onChange, initialValue }) => {
       // Do nothing if editor not ready
       return;
     }
+
     const unformattedCode = editorRef.current.getModel().getValue();
     const formattedCode = prettier
       .format(unformattedCode, {
@@ -56,6 +75,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ onChange, initialValue }) => {
         singleQuote: true,
       }) 
       .replace(/\n$/, ''); // prevent prettier to add trailing newline
+      
     editorRef.current.setValue(formattedCode);
   };
 
