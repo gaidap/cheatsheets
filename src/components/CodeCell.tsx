@@ -16,11 +16,13 @@ const CodeCell: React.FC = () => {
   return (
     <Resizable direction="vertical">  
     <div style={{height: '100%', display: 'flex', flexDirection: 'row'}}>
+    <Resizable direction="horizontal">  
       <CodeEditor
         initialValue="const helloWorld = () => console.log('Hello World!');"
         onChange={(value) => setInput(value)}
       />
-      <Preview code={code} />
+    </Resizable>
+    <Preview code={code} />
     </div>
     </Resizable>
   );

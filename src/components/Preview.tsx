@@ -8,7 +8,9 @@ interface PreviewProps {
 // Generate html document locally to prevent an unnecessary request to fetch the html for the iFrame
 const htmlContent = `
 <html>
-  <head></head>
+  <head>
+    <style>html { background-color: antiquewhite; }</style>
+  </head>
   <body>
     <div id="root"></div>
     <script>
