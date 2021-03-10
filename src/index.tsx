@@ -9,10 +9,11 @@ const App = () => {
   return (
     <Provider store={store}>
       <div>
+        <CodeCell />
         <MarkdownEditor />
       </div>
     </Provider>
-   );
+  );
 };
 
 ReactDOM.render(<App/>, document.querySelector('#root'));

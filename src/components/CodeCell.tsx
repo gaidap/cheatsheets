@@ -26,7 +26,7 @@ const CodeCell: React.FC = () => {
   return (
     <Resizable direction={Direction.VERTICAL}>
       <div style={{ height: '100%', display: 'flex', flexDirection: 'row' }}>
-        <Resizable direction={Direction.VERTICAL}>
+        <Resizable direction={Direction.HORIZONTAL}>
           <CodeEditor initialValue='// Start by typing some code' onChange={(value) => setInput(value)} />
         </Resizable>
         <Preview code={code} bundlingStatus={bundlingStatus} />
