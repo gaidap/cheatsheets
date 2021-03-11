@@ -35,7 +35,6 @@ const reducer = produce(
         insertCellBefore(state, action);
         return state;
       default:
-        console.warn(`Action: ${action} does not exist.`);
         return state;
     }
   }
