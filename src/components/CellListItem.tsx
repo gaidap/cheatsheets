@@ -1,0 +1,19 @@
+import { Cell, CellType } from '../state';
+import CodeCell from './CodeCell';
+import MarkdownEditor from './MarkdownEditor';
+
+interface CellListItemProps {
+  cell: Cell;
+}
+
+const CellListItem: React.FC<CellListItemProps> = ({ cell }) => {
+  let child: JSX.Element;
+  if (cell.type === CellType.CODE) {
+    child = <CodeCell />;
+  } else {
+    child = <MarkdownEditor />;
+  }
+  return <div>{child}</div>;
+};
+
+export default CellListItem;
