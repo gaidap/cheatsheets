@@ -18,11 +18,10 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
     const { data, order } = state.cells;
     const orderedCells = order.map((id) => data[id]);
     // Add build in preview function to help user render stuff to the preview area
-    const result = [
-      `
+    const previewFn = `
         import __React__ from 'react';
         import __ReactDOM__ from 'react-dom';
-        const preview = (value) => {
+        var preview = (value) => {
           const root = document.querySelector('#root');
           if(value && value.$$typeof && value.props) {
             __ReactDOM__.render(value, root);
@@ -31,11 +30,18 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
           } else {
             root.innerHTML = value;
           }
-        }
-    `,
-    ];
+        };
+    `;
+    // Override the preview funtion with no-op version to prevent calls in subsequent cells
+    const previewFnNoOp = 'var preview = () => {};';
+    const result = [];
     for (let currentCell of orderedCells) {
       if (currentCell.type === CellType.CODE) {
+        if (currentCell.id === cell.id) {
+          result.push(previewFn);
+        } else {
+          result.push(previewFnNoOp);
+        }
         result.push(currentCell.content);
       }
       if (currentCell.id === cell.id) {
