@@ -11,7 +11,7 @@ const CellListItem: React.FC<CellListItemProps> = ({ cell }) => {
   if (cell.type === CellType.CODE) {
     child = <CodeCell cell={cell}/>;
   } else {
-    child = <MarkdownEditor />;
+    child = <MarkdownEditor cell={cell}/>;
   }
   return <div>{child}</div>;
 };
