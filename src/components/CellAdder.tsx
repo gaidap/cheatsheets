@@ -4,12 +4,13 @@ import { CellType } from '../state';
 
 interface AddCellProps {
   nextCellId: string | null;
+  forceVisible?: boolean;
 }
 
-const CellAdder: React.FC<AddCellProps> = ({ nextCellId }) => {
+const CellAdder: React.FC<AddCellProps> = ({ nextCellId, forceVisible }) => {
   const { insertCellBefore } = useActions();
   return (
-    <div className='cell-adder'>
+    <div className={`cell-adder ${forceVisible && 'force-visible'}`}>
       <div className='add-buttons'>
         <button className='button is-rounded is-primary is-small' onClick={() => insertCellBefore(nextCellId, CellType.CODE)}>
           <span className='icon is-small'>
