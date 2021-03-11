@@ -20,25 +20,25 @@ const initialState: CellState = {
 };
 
 const reducer = produce(
-  (state: CellState = initialState, action: Action): void => {
-      switch (action.type) {
-        case ActionType.MOVE_CELL:
-          moveCell(state, action);
-          return;
-        case ActionType.UPDATE_CELL:
-          updateCell(state, action);
-          return;
-        case ActionType.DELETE_CELL:
-          deleteCell(state, action);
-          return;
-        case ActionType.INSERT_CELL_BEFORE:       
-          insertCellBefore(state, action);
-          return;
-        default:
-          console.warn(`Action: ${action} does not exist.`)
-          return;
-      }
+  (state: CellState = initialState, action: Action): CellState => {
+    switch (action.type) {
+      case ActionType.MOVE_CELL:
+        moveCell(state, action);
+        return state;
+      case ActionType.UPDATE_CELL:
+        updateCell(state, action);
+        return state;
+      case ActionType.DELETE_CELL:
+        deleteCell(state, action);
+        return state;
+      case ActionType.INSERT_CELL_BEFORE:
+        insertCellBefore(state, action);
+        return state;
+      default:
+        console.warn(`Action: ${action} does not exist.`);
+        return state;
     }
+  }
 );
 
 const moveCell = (state: CellState, action: MoveCellAction): void => {
