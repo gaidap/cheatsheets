@@ -3,15 +3,21 @@ import CodeEditor from './CodeEditor';
 import Preview from './Preview';
 import Resizable, { Direction } from './Resizable';
 import bundle from '../bundler';
+import { Cell } from '../state';
+import { useActions } from '../hooks/use-actions';
 
-const CodeCell: React.FC = () => {
+interface CodeCellProps {
+  cell: Cell;
+}
+
+const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
   const [code, setCode] = useState('');
-  const [input, setInput] = useState('');
   const [bundlingStatus, setBundlingStatus] = useState('');
+  const {  updateCell  } = useActions();
 
   useEffect(() => {
     const timer = setTimeout(async () => {
-      const bundleOutput = await bundle(input);
+      const bundleOutput = await bundle(cell.content);
       setCode(bundleOutput.code);
       setBundlingStatus(bundleOutput.error);
     }, 1000);
@@ -21,13 +27,13 @@ const CodeCell: React.FC = () => {
         clearTimeout(timer);
       }
     };
-  }, [input]);
+  }, [cell.content]);
 
   return (
     <Resizable direction={Direction.VERTICAL}>
       <div style={{ height: '100%', display: 'flex', flexDirection: 'row' }}>
         <Resizable direction={Direction.HORIZONTAL}>
-          <CodeEditor initialValue='// Start by typing some code' onChange={(value) => setInput(value)} />
+          <CodeEditor initialValue={cell.content} onChange={(value) => updateCell(cell.id, value)} />
         </Resizable>
         <Preview code={code} bundlingStatus={bundlingStatus} />
       </div>
