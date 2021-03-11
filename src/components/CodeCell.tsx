@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import CodeEditor from './CodeEditor';
 import Preview from './Preview';
 import Resizable, { Direction } from './Resizable';
-import { Cell } from '../state';
+import { Cell, CellType } from '../state';
 import { useActions } from '../hooks/use-actions';
 import { useTypedSelector } from '../hooks/use-typed-selector';
 
@@ -14,15 +14,45 @@ interface CodeCellProps {
 const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
   const { updateCell, createBundle } = useActions();
   const bundle = useTypedSelector((state) => state.bundles[cell.id]);
+  const cumulativeCode = useTypedSelector((state) => {
+    const { data, order } = state.cells;
+    const orderedCells = order.map((id) => data[id]);
+    // Add build in preview function to help user render stuff to the preview area
+    const result = [
+      `
+        import __React__ from 'react';
+        import __ReactDOM__ from 'react-dom';
+        const preview = (value) => {
+          const root = document.querySelector('#root');
+          if(value && value.$$typeof && value.props) {
+            __ReactDOM__.render(value, root);
+          } else if(typeof value === 'object') {
+            root.innerHTML = JSON.stringify(value, null, 2);
+          } else {
+            root.innerHTML = value;
+          }
+        }
+    `,
+    ];
+    for (let currentCell of orderedCells) {
+      if (currentCell.type === CellType.CODE) {
+        result.push(currentCell.content);
+      }
+      if (currentCell.id === cell.id) {
+        break;
+      }
+    }
+    return result;
+  });
 
   useEffect(() => {
-    if  (!bundle) {
-      createBundle(cell.id, cell.content);
+    if (!bundle) {
+      createBundle(cell.id, cumulativeCode.join('\n'));
       return;
     }
 
     const timer = setTimeout(async () => {
-      createBundle(cell.id, cell.content);
+      createBundle(cell.id, cumulativeCode.join('\n'));
     }, 1000);
 
     return () => {
@@ -30,9 +60,9 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
         clearTimeout(timer);
       }
     };
-    // disabled warning: adding bundle will lead to an infinite loop so it cannot be placed in the array 
+    // disabled warning: adding bundle will lead to an infinite loop so it cannot be placed in the array
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cell.id, cell.content, createBundle]);
+  }, [cell.id, cumulativeCode.join('\n'), createBundle]);
 
   return (
     <Resizable direction={Direction.VERTICAL}>
