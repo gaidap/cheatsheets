@@ -1,6 +1,6 @@
 import produce from 'immer';
 import { ActionType } from '../action-types';
-import { Action, DeleteCellAction, Direction, InsertCellBeforeAction, MoveCellAction, UpdateCellAction } from '../actions';
+import { Action, DeleteCellAction, Direction, InsertCellAfterAction, MoveCellAction, UpdateCellAction } from '../actions';
 import { Cell } from '../cell';
 
 interface CellState {
@@ -31,8 +31,8 @@ const reducer = produce(
       case ActionType.DELETE_CELL:
         deleteCell(state, action);
         return state;
-      case ActionType.INSERT_CELL_BEFORE:
-        insertCellBefore(state, action);
+      case ActionType.INSERT_CELL_AFTER:
+        insertCellAfter(state, action);
         return state;
       default:
         return state;
@@ -54,8 +54,8 @@ const moveCell = (state: CellState, action: MoveCellAction): void => {
   state.order[newIndex] = action.payload.id;
 };
 
-const findIndexByPayloadId = (state: CellState, action: MoveCellAction | InsertCellBeforeAction): number => {
- return state.order.findIndex((id) => id === action.payload.id);
+const findIndexByPayloadId = (state: CellState, action: MoveCellAction | InsertCellAfterAction): number => {
+  return state.order.findIndex((id) => id === action.payload.id);
 };
 
 const updateCell =(state: CellState, action: UpdateCellAction): void => {
@@ -72,20 +72,21 @@ const generateRandomId = (): string => {
   return Math.random().toString(36).substr(2, 5);
 };
 
-const insertCellBefore = (state: CellState, action: InsertCellBeforeAction) => {
+const insertCellAfter = (state: CellState, action: InsertCellAfterAction) => {
   const newCell: Cell = {
     id: generateRandomId(),
     type: action.payload.type,
-    content: ''
+    content: '',
   };
   state.data[newCell.id] = newCell;
-  
+
   const index = findIndexByPayloadId(state, action);
-  if (index < 0) { // place new cell at top if index is first element
-    state.order.push(newCell.id);
+  if (index < 0) {
+    // place new cell at top if index is first element
+    state.order.unshift(newCell.id);
   } else {
-    state.order.splice(index, 0, newCell.id);
+    state.order.splice(index + 1, 0, newCell.id);
   }
-}
+};
 
 export default reducer;
