@@ -1,7 +1,7 @@
 .cell-adder {
   position: relative;
   opacity: 0;
-  transition: 0.3s;
+  transition: 0.3s ease-in 0.1s;
 }
 
 .cell-adder:hover {
