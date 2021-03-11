@@ -9,9 +9,22 @@ interface AddCellProps {
 const CellAdder: React.FC<AddCellProps> = ({ nextCellId }) => {
   const { insertCellBefore } = useActions();
   return (
-    <div>
-      <button onClick={() => insertCellBefore(nextCellId, CellType.CODE)}>Code</button>
-      <button onClick={() => insertCellBefore(nextCellId, CellType.MARKDOWN)}>Markdown</button>
+    <div className='cell-adder'>
+      <div className='add-buttons'>
+        <button className='button is-rounded is-primary is-small' onClick={() => insertCellBefore(nextCellId, CellType.CODE)}>
+          <span className='icon is-small'>
+            <i className='fas fa-plus' />
+          </span>
+          <span>Code</span>
+        </button>
+        <button className='button is-rounded is-primary is-small' onClick={() => insertCellBefore(nextCellId, CellType.MARKDOWN)}>
+          <span className='icon is-small'>
+            <i className='fas fa-plus' />
+          </span>
+          <span>Markdown</span>
+        </button>
+      </div>
+      <div className='divider'></div>
     </div>
   );
 };

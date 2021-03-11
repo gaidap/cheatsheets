@@ -1,0 +1,33 @@
+.cell-adder {
+  position: relative;
+  opacity: 0;
+  transition: 0.3s;
+}
+
+.cell-adder:hover {
+  opacity: 1.0;
+}
+
+.force-visible .cell-adder {
+  opacity: 1.0;
+}
+
+.cell-adder .divider {
+  position: absolute;
+  top:50%;
+  bottom: 50%;
+  right: 2.5%;
+  left: 2.5%;
+  border-bottom: 1px solid gray;
+  width: 95%;
+  z-index: -1;
+}
+
+.cell-adder .add-buttons {
+  display: flex;
+  justify-content: center;
+}
+
+.cell-adder .add-buttons button {
+  margin: 0 25px;
+}
