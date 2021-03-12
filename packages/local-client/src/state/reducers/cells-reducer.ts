@@ -9,6 +9,7 @@ import {
   FetchCellsErrorAction,
   InsertCellAfterAction,
   MoveCellAction,
+  SaveCellsErrorAction,
   UpdateCellAction,
 } from '../actions';
 import { Cell } from '../cell';
@@ -52,6 +53,9 @@ const reducer = produce(
         return state;
       case ActionType.FETCH_CELLS_ERROR:
         fetchCellsError(state, action);
+        return state;
+      case ActionType.SAVE_CELLS_ERROR:
+        saveCellsError(state, action);
         return state;
       default:
         return state;
@@ -122,6 +126,11 @@ const fetchCellsComplete = (state: CellState, action: FetchCellsCompleteAction):
 };
 
 const fetchCellsError = (state: CellState, action: FetchCellsErrorAction): void => {
+  state.loading = false;
+  state.error = action.payload;
+};
+
+const saveCellsError = (state: CellState, action: SaveCellsErrorAction): void => {
   state.loading = false;
   state.error = action.payload;
 };
