@@ -5,7 +5,7 @@ It assambles a little notebook application that you can use to write, execute an
   
 You might have to disable your script blocker. Notice that uMatrix (https://github.com/gorhill/uMatrix/issues/926) get you some error message with the csp headers but you can ignore them, the app will work normally.  
 
-Note: As technical trade off I decided not to provide a second server to serve the iFrame content hence you cannot use localStorage, cookies or some other browser related features from your code snippets.
+Note: As technical trade off I decided not to provide a second server to serve the iFrame content hence you cannot use localStorage, cookies or some other browser related features like alerts from your code snippets.
 
 ## How to use Cheatsheets
 ### Code Editor
