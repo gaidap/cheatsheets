@@ -5,7 +5,7 @@ It assambles a little notebook application that you can use to write, execute an
 
 ## How to install Cheatsheets
 
-You can install Cheatsheets to your local machine with npx cs-sli or (sudo) npm install -g cs-cli.  
+You can install Cheatsheets to your local machine with npx gaidap-cs or (sudo) npm install -g gaidap-cs.  
 
 ## How to use Cheatsheets
 
