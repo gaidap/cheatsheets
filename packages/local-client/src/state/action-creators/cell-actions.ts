@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Dispatch } from 'redux';
 import { ActionType } from '../action-types';
-import { Direction, MoveCellAction, UpdateCellAction, DeleteCellAction, InsertCellAfterAction, FetchCellsAction, Action } from '../actions';
+import { Direction, MoveCellAction, UpdateCellAction, DeleteCellAction, InsertCellAfterAction, Action } from '../actions';
 import { Cell, CellType } from '../cell';
 import { RootState } from '../reducers';
 
@@ -60,9 +60,7 @@ export const saveCells = () => {
       cells: { data, order },
     } = getState();
 
-    const cells = order.map((id) => {
-      data[id];
-    });
+    const cells = order.map((id) => data[id]);
 
     try {
       await axios.post('/cells', { cells });

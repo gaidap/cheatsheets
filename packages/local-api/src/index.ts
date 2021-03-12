@@ -6,6 +6,8 @@ import { createCellsRouter } from './routes/cells';
 export const serve = (port: number, filename: string, dir: string, useDevProxy: boolean) => {
   const app = express();
 
+  app.use(createCellsRouter(filename, dir));
+
   if (useDevProxy) {
     // Development mode
     app.use(
@@ -21,8 +23,6 @@ export const serve = (port: number, filename: string, dir: string, useDevProxy: 
     const localClientPath = require.resolve('local-client/build/index.html');
     app.use(express.static(path.dirname(localClientPath)));
   }
-
-  app.use(createCellsRouter(filename, dir));
 
   return new Promise<void>((resolve, reject) => {
     app.listen(port, resolve).on('error', reject);

@@ -1,5 +1,5 @@
 import express from 'express';
-import fs from 'fs/promises';
+import { promises as fs } from 'fs';
 import path from 'path';
 
 enum IOError {
@@ -23,7 +23,7 @@ export const createCellsRouter = (filename: string, dir: string) => {
 
   const fullPath = path.join(dir, filename);
 
-  router.get('/cells', async (request, response) => {
+  router.get('/cells', async (_request, response) => {
     try {
       const result = await fs.readFile(fullPath, { encoding: 'utf-8' });
       response.send(JSON.parse(result));
