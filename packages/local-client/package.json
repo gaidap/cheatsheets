@@ -61,7 +61,6 @@
     ]
   },
   "description": "This is a little learning project to get familiar with React and TypeScript.   It assambles a little notebook application that you can use to write, execute and store little code snippets written in JavaScript, JSX, HTML and CSS.",
-  "main": "local-api.js",
   "devDependencies": {},
   "keywords": [],
   "author": "",
