@@ -20,7 +20,7 @@ export const serve = (port: number, filename: string, dir: string, useDevProxy: 
   } else {
     // Production mode
     // Link the local-client package as static resource to serve the Cheatsheets app with an absolute path
-    const localClientPath = require.resolve('@cs-cli/local-client/build/index.html');
+    const localClientPath = require.resolve('@gaidap-cs/local-client/build/index.html');
     app.use(express.static(path.dirname(localClientPath)));
   }
 

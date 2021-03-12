@@ -1,6 +1,6 @@
 import path from 'path';
 import { Command } from 'commander';
-import { serve } from '@cs-cli/local-api';
+import { serve } from '@gaidap-cs/local-api';
 
 enum ServeErrors {
   EADDRINUSE = 'EADDRINUSE'
