@@ -6,7 +6,6 @@
     "dist"
   ],
   "publishConfig": {
-    "cache": "~/.npm",
     "registry": "https://registry.npmjs.org",
     "access": "public"
   },
