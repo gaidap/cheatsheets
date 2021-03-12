@@ -1,6 +1,8 @@
+import axios from 'axios';
+import { Dispatch } from 'redux';
 import { ActionType } from '../action-types';
-import { Direction, MoveCellAction, UpdateCellAction, DeleteCellAction, InsertCellAfterAction } from '../actions';
-import { CellType } from '../cell';
+import { Direction, MoveCellAction, UpdateCellAction, DeleteCellAction, InsertCellAfterAction, FetchCellsAction, Action } from '../actions';
+import { Cell, CellType } from '../cell';
 
 export const moveCell = (id: string, direction: Direction): MoveCellAction => {
   return {
@@ -36,5 +38,17 @@ export const insertCellAfter = (id: string | null, cellType: CellType): InsertCe
       id: id,
       type: cellType,
     },
+  };
+};
+
+export const fetchCells = () => {
+  return async (dispatch: Dispatch<Action>) => {
+    dispatch({ type: ActionType.FETCH_CELLS });
+    try {
+      const { data }: { data: Cell[] } = await axios.get('/cells');
+      dispatch({ type: ActionType.FETCH_CELLS_COMPLETE, payload: data });
+    } catch (error) {
+      dispatch({ type: ActionType.FETCH_CELLS_ERROR, payload: error.message });
+    }
   };
 };

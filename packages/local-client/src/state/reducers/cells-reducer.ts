@@ -1,6 +1,16 @@
 import produce from 'immer';
 import { ActionType } from '../action-types';
-import { Action, DeleteCellAction, Direction, InsertCellAfterAction, MoveCellAction, UpdateCellAction } from '../actions';
+import {
+  Action,
+  DeleteCellAction,
+  Direction,
+  FetchCellsAction,
+  FetchCellsCompleteAction,
+  FetchCellsErrorAction,
+  InsertCellAfterAction,
+  MoveCellAction,
+  UpdateCellAction,
+} from '../actions';
 import { Cell } from '../cell';
 
 interface CellState {
@@ -33,6 +43,15 @@ const reducer = produce(
         return state;
       case ActionType.INSERT_CELL_AFTER:
         insertCellAfter(state, action);
+        return state;
+      case ActionType.FETCH_CELLS:
+        fetchCells(state, action);
+        return state;
+      case ActionType.FETCH_CELLS_COMPLETE:
+        fetchCellsComplete(state, action);
+        return state;
+      case ActionType.FETCH_CELLS_ERROR:
+        fetchCellsError(state, action);
         return state;
       default:
         return state;
@@ -87,6 +106,24 @@ const insertCellAfter = (state: CellState, action: InsertCellAfterAction) => {
   } else {
     state.order.splice(index + 1, 0, newCell.id);
   }
+};
+
+const fetchCells = (state: CellState, action: FetchCellsAction): void => {
+  state.loading = true;
+  state.error = null;
+};
+
+const fetchCellsComplete = (state: CellState, action: FetchCellsCompleteAction): void => {
+  state.order = action.payload.map((cell) => cell.id);
+  state.data = action.payload.reduce((accumulator, cell) => {
+    accumulator[cell.id] = cell;
+    return accumulator;
+  }, {} as CellState['data']); // This empty object is here to make TypeScript happy
+};
+
+const fetchCellsError = (state: CellState, action: FetchCellsErrorAction): void => {
+  state.loading = false;
+  state.error = action.payload;
 };
 
 export default reducer;
