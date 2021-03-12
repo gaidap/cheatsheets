@@ -1,8 +1,19 @@
 {
   "name": "@cs-cli/local-client",
   "version": "1.0.0",
-  "private": true,
-  "dependencies": {
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "This is a little learning project to get familiar with React and TypeScript.   It assambles a little notebook application that you can use to write, execute and store little code snippets written in JavaScript, JSX, HTML and CSS.",
+  "files": [
+    "build"
+  ],
+  "publishConfig": {
+    "cache": "~/.npm",
+    "registry": "https://registry.npmjs.org",
+    "access": "public"
+  },
+  "devDependencies": {
     "@fortawesome/fontawesome-free": "^5.15.2",
     "@monaco-editor/react": "3.7.5",
     "@testing-library/jest-dom": "^5.11.4",
@@ -36,11 +47,13 @@
     "typescript": "^4.1.2",
     "web-vitals": "^1.0.1"
   },
+  "dependencies": {},
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "prepublishOnly": "npm run build"
   },
   "eslintConfig": {
     "extends": [
@@ -59,10 +72,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "description": "This is a little learning project to get familiar with React and TypeScript.   It assambles a little notebook application that you can use to write, execute and store little code snippets written in JavaScript, JSX, HTML and CSS.",
-  "devDependencies": {},
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  }
 }
