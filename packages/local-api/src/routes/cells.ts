@@ -1,5 +1,5 @@
 import express from 'express';
-import { promises as fs } from 'fs';
+import { promises as fs } from 'fs'; // I do not really understand why, but this here works (https://github.com/nodejs/node/issues/21014)
 import path from 'path';
 
 enum IOError {
