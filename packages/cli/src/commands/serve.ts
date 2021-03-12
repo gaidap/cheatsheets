@@ -1,6 +1,6 @@
 import path from 'path';
-import { Command, option } from 'commander';
-import { serve } from 'local-api';
+import { Command } from 'commander';
+import { serve } from '@cs-cli/local-api';
 
 enum ServeErrors {
   EADDRINUSE = 'EADDRINUSE'
