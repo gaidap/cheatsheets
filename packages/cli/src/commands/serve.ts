@@ -15,7 +15,7 @@ export const serveCommand = new Command()
       const dir = path.join(process.cwd(), path.dirname(filename));
       await serve(parseInt(options.port), path.basename(filename), dir); 
       console.log(
-        `Opened ${filename}. Please navigate to http://localhost:${options.port} use Cheatsheets.`
+        `Opened ${filename}. Please navigate to http://localhost:${options.port} to use Cheatsheets.`
         );
     } catch (error) {
       if(error.code === ServeErrors.EADDRINUSE) {
