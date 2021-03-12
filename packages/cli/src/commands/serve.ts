@@ -6,6 +6,8 @@ enum ServeErrors {
   EADDRINUSE = 'EADDRINUSE'
 }
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 export const serveCommand = new Command()
   .command('serve [filename]')
   .description('Starts server and opens a file for editing. The filename is optional and defaults to notebook.js.')
@@ -13,7 +15,7 @@ export const serveCommand = new Command()
   .action(async (filename = 'notebook.js', options: { port: string }) => {
     try {
       const dir = path.join(process.cwd(), path.dirname(filename));
-      await serve(parseInt(options.port), path.basename(filename), dir); 
+      await serve(parseInt(options.port), path.basename(filename), dir, !isProduction); 
       console.log(
         `Opened ${filename}. Please navigate to http://localhost:${options.port} to use Cheatsheets.`
         );
