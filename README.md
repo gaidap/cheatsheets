@@ -24,7 +24,6 @@ You can use a build function called preview, for example preview(<div>Hello!</di
 ### Markdown Editor
 A simple texteditor where you can use markdown syntax to format your text or display content like pictures. Click inside the editor cell to open the edito and click outside the cell to close the editor.
 
-### Markdown Editor
 ## Keyboard shortcuts
 ### Code editor
 - ctrl + alt + Enter => clear screen
