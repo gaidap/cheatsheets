@@ -10,9 +10,11 @@ You can install Cheatsheets to your local machine with npx cs-sli or (sudo) npm 
 ## How to use Cheatsheets
 
 ## Start Cheatsheets
- - npx cs-sli serve
- - npx cs-sli serve notes.js
- - npx cs-sli serve notes.js --port 3050
+ - npx gaidap-cs serve
+ - npx gaidap-cs serve notes.js
+ - npx gaidap-cs serve notes.js --port 3050
+
+ Note: In case you get an "SyntaxError: Unexpected token '?'" please try to update to the latest node version.
 
 ### Code Editor
 This editor is based on the Monaco-Editor (VSCode). You have features like auto complete and various other default features at your service.  
